@@ -20,6 +20,7 @@ source_dir = r"C:\Users\Felmyr Gamboa\Desktop\BSCpE 1-5 First Sem\Programming Lo
 destination_dir = r"C:\Users\Felmyr Gamboa\Desktop\Backups"
 
 def creating_backup_folder_to_directory(source, dest):
+
     today = datetime.date.today()
     destination_dir = os.path.join(dest, str(today))
 
@@ -31,6 +32,7 @@ def creating_backup_folder_to_directory(source, dest):
         print(f"Folder already exists in: {dest} \n")
 
 scopes = ['https://www.googleapis.com/auth/drive']
+
 credits = None
 
 def automate_gdrive_backup_files():
@@ -43,7 +45,7 @@ def automate_gdrive_backup_files():
 
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                "automated_google_drive_backup_files/user_credentials.json", scopes)
+                "automatic_file_backups/user_credentials.json", scopes)
             credits = flow.run_local_server(port = 0)
 
         with open("token.json", 'w') as token:
@@ -53,7 +55,7 @@ def automate_gdrive_backup_files():
         service = build("drive", "v3", credentials = credits)
 
         response = service.files().list(
-            query = "name = 'BackupFolder' and mimeType = 'appli'application/vnd.google-apps.folder'",
+            q = "name = 'BackupFolder' and mimeType = 'application/vnd.google-apps.folder'",
             spaces = 'drive'
         ).execute()
 
@@ -74,6 +76,7 @@ def automate_gdrive_backup_files():
             file_metadata = {
                 "name": file,
                 "parents": [folder_id]
+
             }
 
             media = MediaFileUpload(f"backupfiles_trial/{file}")
@@ -87,8 +90,9 @@ def automate_gdrive_backup_files():
     except HttpError as execute:
         print("Error: " + str(execute))
 
-schedule.every().day.at("").do(lambda: creating_backup_folder_to_directory(source_dir, destination_dir))
-schedule.every().day.at("").do(lambda: automate_gdrive_backup_files())
+
+schedule.every().day.at("01:40").do(lambda: creating_backup_folder_to_directory(source_dir, destination_dir))
+schedule.every().day.at("01:40").do(lambda: automate_gdrive_backup_files())
 
 while True:
     schedule.run_pending()
