@@ -57,6 +57,18 @@ def automate_gdrive_backup_files():
             spaces = 'drive'
         ).execute()
 
+        if not response['files']:
+            file_metadata = {
+                "name" : "BackupFolder",
+                "mimeType" : "application/vnd.google-apps.folder"
+            }
+
+            file = service.files().create(body = file_metadata, fields = "id").execute()
+
+            folder_id = file.get('id')
+
+        else: 
+            folder_id = response["files"][0]['id']
 
 schedule.every().day.at("").do(lambda: creating_backup_folder_to_directory(source_dir, destination_dir))
 
