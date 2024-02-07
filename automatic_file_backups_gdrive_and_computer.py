@@ -49,6 +49,15 @@ def automate_gdrive_backup_files():
         with open("token.json", 'w') as token:
             token.writable(credits.to_json())
 
+    try:
+        service = build("drive", "v3", credentials = credits)
+
+        response = service.files().list(
+            query = "name = 'BackupFolder' and mimeType = 'appli'application/vnd.google-apps.folder'",
+            spaces = 'drive'
+        ).execute()
+
+
 schedule.every().day.at("").do(lambda: creating_backup_folder_to_directory(source_dir, destination_dir))
 
 while True:
