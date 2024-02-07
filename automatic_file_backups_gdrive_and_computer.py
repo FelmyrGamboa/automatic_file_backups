@@ -24,18 +24,18 @@ def creating_backup_folder_to_directory(source, dest):
     destination_dir = os.path.join(dest, str(today))
 
     try:
-        shutil.copytree(source, dest_dir)
+        shutil.copytree(source, destination_dir)
         print(f"Folder copied to: {destination_dir}")
 
     except FileExistsError:
         print(f"Folder already exists in: {dest} \n")
 
-
 scopes = ['https://www.googleapis.com/auth/drive']
 credits = None
 
 def automate_gdrive_backup_files():
-    
+    if os.path.exists("token.json"):
+        credits = Credentials.from_authorized_user_file("token.json", scopes)
 
 schedule.every().day.at("").do(lambda: creating_backup_folder_to_directory(source_dir, destination_dir))
 
