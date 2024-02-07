@@ -30,6 +30,13 @@ def creating_backup_folder_to_directory(source, dest):
     except FileExistsError:
         print(f"Folder already exists in: {dest} \n")
 
+
+scopes = ['https://www.googleapis.com/auth/drive']
+credits = None
+
+def automate_gdrive_backup_files():
+    
+
 schedule.every().day.at("").do(lambda: creating_backup_folder_to_directory(source_dir, destination_dir))
 
 while True:
