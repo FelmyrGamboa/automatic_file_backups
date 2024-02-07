@@ -29,3 +29,9 @@ def creating_backup_folder_to_directory(source, dest):
 
     except FileExistsError:
         print(f"Folder already exists in: {dest} \n")
+
+schedule.every().day.at("").do(lambda: creating_backup_folder_to_directory(source_dir, destination_dir))
+
+while True:
+    schedule.run_pending()
+    time.sleep(60)
