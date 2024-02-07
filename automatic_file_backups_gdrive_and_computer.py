@@ -37,6 +37,18 @@ def automate_gdrive_backup_files():
     if os.path.exists("token.json"):
         credits = Credentials.from_authorized_user_file("token.json", scopes)
 
+    if not credits or not credits.valid:
+        if credits and credits.expired and credits.refresh_token:
+            credits.refresh(Request())
+
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                "automated_google_drive_backup_files/user_credentials.json", scopes)
+            credits = flow.run_local_server(port = 0)
+
+        with open("token.json", 'w') as token:
+            token.writable(credits.to_json())
+
 schedule.every().day.at("").do(lambda: creating_backup_folder_to_directory(source_dir, destination_dir))
 
 while True:
