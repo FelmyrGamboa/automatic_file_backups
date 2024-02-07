@@ -84,6 +84,9 @@ def automate_gdrive_backup_files():
             print("Backed up files: " + file)
         print("\nFiles has been backup in google drive. ")
 
+    except HttpError as execute:
+        print("Error: " + str(execute))
+
 schedule.every().day.at("").do(lambda: creating_backup_folder_to_directory(source_dir, destination_dir))
 schedule.every().day.at("").do(lambda: automate_gdrive_backup_files())
 
