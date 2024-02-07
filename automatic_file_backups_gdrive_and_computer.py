@@ -85,6 +85,7 @@ def automate_gdrive_backup_files():
         print("\nFiles has been backup in google drive. ")
 
 schedule.every().day.at("").do(lambda: creating_backup_folder_to_directory(source_dir, destination_dir))
+schedule.every().day.at("").do(lambda: automate_gdrive_backup_files())
 
 while True:
     schedule.run_pending()
