@@ -70,6 +70,20 @@ def automate_gdrive_backup_files():
         else: 
             folder_id = response["files"][0]['id']
 
+        for file in os.listdir("backupfiles_trial"):
+            file_metadata = {
+                "name": file,
+                "parents": [folder_id]
+            }
+
+            media = MediaFileUpload(f"backupfiles_trial/{file}")
+            upload_file = service.files().create(body = file_metadata,
+                                                 media_body = media,
+                                                 fields = "id").execute()
+            
+            print("Backed up files: " + file)
+        print("\nFiles has been backup in google drive. ")
+
 schedule.every().day.at("").do(lambda: creating_backup_folder_to_directory(source_dir, destination_dir))
 
 while True:
